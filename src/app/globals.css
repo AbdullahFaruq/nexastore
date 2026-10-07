@@ -1,26 +1,350 @@
 @import "tailwindcss";
 
+/* Theme is driven by a `.dark` class on <html> (next-themes, attribute="class"). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================================
+   NexaStore design tokens — "Brass"
+   ----------------------------------------------------------------------------
+   Identity: a precision financial instrument. Warm-neutral surfaces (ledger
+   paper in light, amber-phosphor terminal in dark) with a brass accent.
+
+   Rule: the BRAND accent (brass) is never used to mean "good". Financial
+   polarity is carried exclusively by --pos / --neg so a rising number can
+   never be confused with a branded surface.
+
+   Chart palette validated with the dataviz validator in both modes
+   (see docs/DESIGN.md). Do not hand-edit series hexes.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  /* Surfaces — warm neutral ramp */
+  --page: #fdfcfa;
+  --surface: #ffffff;
+  --surface-2: #f7f5f2;
+  --surface-3: #f0ede8;
+  --inset: #faf8f5;
+
+  /* Lines */
+  --line: #e8e4dd;
+  --line-strong: #d8d3ca;
+  --ring: #b8802e;
+
+  /* Ink */
+  --ink: #1c1a17;
+  --ink-2: #615c54;
+  --ink-3: #78726a;
+  --ink-invert: #fdfcfa;
+
+  /* Brand accent — brass */
+  --accent: #b8802e;
+  --accent-hover: #a26f26;
+  --accent-active: #8d5f1f;
+  --accent-fg: #fffdf9;
+  --accent-ink: #96661f;
+  --accent-soft: #f6ecdb;
+  --accent-soft-line: #e8d5b4;
+
+  /* Financial polarity */
+  --pos: #0a7038;
+  --pos-soft: #e4f4ea;
+  --neg: #c0392b;
+  --neg-soft: #fbeae7;
+
+  /* Status (reserved — always paired with an icon + label) */
+  --st-good: #0ca30c;
+  --st-warn: #fab219;
+  --st-serious: #ec835a;
+  --st-crit: #d03b3b;
+  --st-neutral: #78726a;
+
+  /* Chart chrome */
+  --chart-surface: #fdfcfa;
+  --grid: #ece8e1;
+  --axis: #cfc9c0;
+  --axis-ink: #8a847a;
+
+  /* Categorical series — light steps */
+  --s1: #b8802e;
+  --s2: #12a08c;
+  --s3: #6a4fd0;
+  --s4: #e2603f;
+  --s5: #2a78d6;
+  --s6: #3f8f2f;
+  --s7: #dc6f9e;
+  --s8: #7d8f1e;
+
+  /* Sequential (brass ramp, light → dark) */
+  --seq-1: #f4e6cf;
+  --seq-2: #e8cfa4;
+  --seq-3: #dbb679;
+  --seq-4: #cd9d52;
+  --seq-5: #b8802e;
+  --seq-6: #946526;
+  --seq-7: #6d4a1c;
+
+  /* Elevation — reserved for floating layers only */
+  --shadow-pop: 0 1px 2px rgb(28 26 23 / 0.06), 0 8px 24px -6px rgb(28 26 23 / 0.14);
+  --shadow-card: 0 1px 2px rgb(28 26 23 / 0.04);
+
+  /* Geometry */
+  --r-sm: 5px;
+  --r: 7px;
+  --r-md: 9px;
+  --r-lg: 13px;
+  --header-h: 56px;
+  --sidebar-w: 236px;
+  --sidebar-w-collapsed: 60px;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --page: #141311;
+  --surface: #1a1917;
+  --surface-2: #211f1d;
+  --surface-3: #2a2724;
+  --inset: #171614;
+
+  --line: #2c2926;
+  --line-strong: #3a3733;
+  --ring: #d9a04a;
+
+  --ink: #f5f3ef;
+  --ink-2: #a8a29a;
+  --ink-3: #948e84;
+  --ink-invert: #141311;
+
+  --accent: #d9a04a;
+  --accent-hover: #e4ae5d;
+  --accent-active: #c78d3a;
+  --accent-fg: #1a1207;
+  --accent-ink: #e0a860;
+  --accent-soft: #2e2517;
+  --accent-soft-line: #453721;
+
+  --pos: #3fca7a;
+  --pos-soft: #14291d;
+  --neg: #f2726a;
+  --neg-soft: #2e1a19;
+
+  --st-good: #0ca30c;
+  --st-warn: #fab219;
+  --st-serious: #ec835a;
+  --st-crit: #d03b3b;
+  --st-neutral: #948e84;
+
+  --chart-surface: #1a1917;
+  --grid: #262421;
+  --axis: #3a3733;
+  --axis-ink: #8a847a;
+
+  --s1: #bd863a;
+  --s2: #17ab95;
+  --s3: #9481ea;
+  --s4: #e26c4b;
+  --s5: #4a92e8;
+  --s6: #56ab45;
+  --s7: #d0729b;
+  --s8: #8b9e26;
+
+  --seq-1: #3a2c17;
+  --seq-2: #55411f;
+  --seq-3: #715728;
+  --seq-4: #8d6e31;
+  --seq-5: #a9863b;
+  --seq-6: #c49f4d;
+  --seq-7: #dbba74;
+
+  --shadow-pop: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -8px rgb(0 0 0 / 0.6);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.2);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-inset: var(--inset);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-invert: var(--ink-invert);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-line: var(--accent-soft-line);
+
+  --color-pos: var(--pos);
+  --color-pos-soft: var(--pos-soft);
+  --color-neg: var(--neg);
+  --color-neg-soft: var(--neg-soft);
+
+  --color-st-good: var(--st-good);
+  --color-st-warn: var(--st-warn);
+  --color-st-serious: var(--st-serious);
+  --color-st-crit: var(--st-crit);
+  --color-st-neutral: var(--st-neutral);
+
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
+  --color-axis-ink: var(--axis-ink);
+
+  --color-s1: var(--s1);
+  --color-s2: var(--s2);
+  --color-s3: var(--s3);
+  --color-s4: var(--s4);
+  --color-s5: var(--s5);
+  --color-s6: var(--s6);
+  --color-s7: var(--s7);
+  --color-s8: var(--s8);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-sm: var(--r-sm);
+  --radius-DEFAULT: var(--r);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+
+  --shadow-pop: var(--shadow-pop);
+  --shadow-card: var(--shadow-card);
+
+  --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade: fade 0.25s ease both;
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  --animate-pop-in: pop-in 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-draw: draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.8; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes draw {
+  from { stroke-dashoffset: var(--dash, 1000); }
+  to { stroke-dashoffset: 0; }
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* Numbers that live in columns must align; standalone hero figures do not. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+  /* Scrollbars — quiet, themed */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 99px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background-clip: content-box; background-color: var(--ink-3); }
+}
+
+@layer components {
+  /* The signature motif: a hairline rule with measurement ticks, used to
+     separate instrument-panel regions. */
+  .tick-rule {
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--line) 0 1px,
+      transparent 1px 6px
+    );
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
+  .num-hero {
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Recharts overrides — keep chrome recessive */
+.recharts-surface { overflow: visible; }
+.recharts-cartesian-axis-tick text { fill: var(--axis-ink); font-size: 11px; }
+.recharts-default-legend { display: none !important; }
+.recharts-tooltip-wrapper { outline: none !important; z-index: 30; }
+.recharts-sector:focus, .recharts-rectangle:focus, .recharts-layer:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
+
+/* Print — invoices, receipts and reports must print cleanly */
+@media print {
+  :root, .dark {
+    --page: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --ink: #000000;
+    --ink-2: #333333;
+    --line: #cccccc;
+  }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  body { background: #fff !important; }
+  .panel { border-color: #ddd !important; box-shadow: none !important; }
+  @page { margin: 14mm; }
+}
+.print-only { display: none; }
